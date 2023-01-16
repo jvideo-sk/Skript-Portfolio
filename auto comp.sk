@@ -4,3 +4,8 @@ function compress(p: player, i: item, r: item):
 		remove 64 of {_i} from {_inv}
 		give {_p} 1 of {_r}
 		stop
+		
+on join:
+	while player is online:
+		compress(player, cobblestone, stone named "Compressed Stone")
+		wait 0.1 seconds
