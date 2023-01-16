@@ -1,0 +1,40 @@
+command /tag:
+	trigger:
+		tag(player)
+
+command /tagmerchant:
+	trigger:
+		tagmerchant(player)
+
+
+function tag(p: player):
+	create a gui with virtual chest inventory with 6 rows named "&8Tags Test":
+		make gui slot 0, 1, 9, 53, 35, and 44 to gray stained glass pane named "&7"
+		make gui slot 18 and 52 to black stained glass pane named "&7"
+		make gui slot 10 with barrier named "&c&lLOCKED TAG" with lore "|&7You have not currently|&7unlocked this tag.|" split at "|"
+		if {tags::nerd::%{_p}'s uuid%} is set:
+			make gui slot 10 with skull of ("Zane_Daddy" parsed as player) named "&6&lNerd &6Tag" with lore "|&aYou have unlocked|&athis tag.||&7Left Click to apply it.||&7Right Click to reset|&7your tag." split at "|":
+				if click type is left mouse button:
+					set {_p}'s suffix to " &6&kk &6&lNERD &6&kk"
+					send "&f&lTAGS &8| &7Your tag current tag is now &6&lNERD&7."
+				if click type is right mouse button:
+					set {_p}'s suffix to ""
+					send "&f&lTAGS &8| &7Your current tag is now &cdisabled&7."
+	open the last gui to {_p}
+
+on right click:
+	if name of event-item contains "&6&lNERD &6TAG":
+		if {tags::nerd::%player's uuid%} is not set:
+			set {tags::nerd::%player's uuid%} to true 
+			remove 1 of paper named "&6&lNERD &6TAG" from player
+			send "&f&lTAGS &8| &7You have claimed the &6&lNERD &7tag."
+		else:
+			cancel event
+			send "&f&lTAGS &8| &7You have already claimed that tag!"
+
+function tagmerchant(p: player):
+	set {_m} to new merchant named "&8Tag Test Merchant"
+	set {_tag1} to merchant recipe with result 1 of paper named "&6&lNERD &6TAG" with lore "|&7Right click to|&7claim this tag.||&7Then do &e/tag|&7to see all available tags." split at "|" with max uses 999
+	set ingredients of merchant recipe {_tag1} to 1 of diamond of aqua affinity 1 named "&cTag Token" with all flags hidden
+	add {_tag1} to merchant recipes of {_m}
+	open merchant {_m} to {_p}
