@@ -1,0 +1,50 @@
+function compress(p: player, i: item, r: item):
+	set {_inv} to {_p}'s inventory 
+	if {_inv} contains 64 of {_i}:
+		remove 64 of {_i} from {_inv}
+		give {_p} 1 of {_r}
+		stop
+
+command compress:
+	permission: compress.use
+	trigger:
+		if {-compress::%player's uuid%} is not set:
+			set {-compress::%player's uuid%} to true
+			send "&aEnabled compressing!"
+		else:
+			delete {-compress::%player's uuid%}
+			send "&cDisabled compressing!"
+
+on join:
+	while player is online:
+		if {-compress::%player's uuid%} is set:
+			compress(player, coal ore, coal of mending 1 named "&8Enchanted Coal" with enchants flag hidden) # Works
+			compress(player, iron ore, raw Iron of mending 1 named "&fEnchanted Iron" with enchants flag hidden) # Works
+			compress(player, Gold ore, raw Gold of mending 1 named "&6Enchanted Gold" with enchants flag hidden) # Works
+			compress(player, Diamond ore, Diamond of mending 1 named "&bEnchanted Diamond" with enchants flag hidden) # Works
+			compress(player, Emerald ore, Emerald of mending 1 named "&aEnchanted Emerald" with enchants flag hidden) # Works
+			compress(player, Redstone ore, Redstone of mending 1 named "&4Enchanted Redstone" with enchants flag hidden) # Work
+			compress(player, Oak Log, stripped oak Wood of mending 1 named "&7Enchanted Oak Wood" with enchants flag hidden)  # Work
+			compress(player, Blue Concrete, Blue terracotta of mending 1 named "&9Enchanted Blue Concrete" with enchants flag hidden) # Work
+			compress(player, Red Concrete, Red terracotta of mending 1 named "&4Enchanted Red Concrete" with enchants flag hidden) # Work
+			compress(player, Slime Block, slimeball of mending 1 named "&2Enchanted Slime" with enchants flag hidden)  # Work
+			#Over World Done ------------------------
+			compress(player, Nether Quartz ore, Nether quartz of mending 1 named "&fNether Quartz Ore" with enchants flag hidden)
+			compress(player, Obsidian, black Concrete of mending 1 named "&8Obsidian" with enchants flag hidden)
+			compress(player, Gilded Blackstone, gold nugget of mending 1 named "&7Enchanted Gilded Blackstone" with enchants flag hidden)
+			compress(player, Blackstone, cracked Polished Blackstone Bricks of mending 1 named "&7Enchanted Blackstone" with enchants flag hidden)
+			compress(player, Crying Obsidian, respawn anchor of mending 1 named "&dEnchanted Crying Obsidian" with enchants flag hidden)
+			compress(player, Polished Blackstone, Polished Blackstone Bricks of mending 1 named "&7Enchanted Polished Blackstone" with enchants flag hidden)
+			compress(player, Stripped Crimson Hyphae, Stripped Crimson stem of mending 1 named "&cStripped Crimson Hyphae" with enchants flag hidden)
+			compress(player, Stripped Warped Hyphae, Stripped Warped stem of mending 1 named "&bStripped Warped Hyphae" with enchants flag hidden)
+			#End Done ------------------------
+			compress(player, End Stone, sandstone of mending 1 named "&eEnchanted End Stone" with enchants flag hidden)
+			compress(player, Purpur Block, chorus fruit of mending 1 named "&5Enchanted Purpur Block" with enchants flag hidden)
+			compress(player, Budding Amethyst, Large amethyst Bud of mending 1 named "&dLarge Amethyst Bud" with enchants flag hidden)
+			compress(player, Packed Ice, Blue Ice of mending 1 named "&bEnchanted Packed Ice" with enchants flag hidden)
+			compress(player, Purpur Pillar, Chorus Plant of mending 1 named "&dPurpur Pillar" with enchants flag hidden)
+			compress(player, End Stone Brick Wall, Sandstone Wall of mending 1 named "&eEnchanted End Stone Bricks Wall" with enchants flag hidden)
+			compress(player, End Stone Bricks, Chiseled sandstone of mending 1 named "&eEnchanted End Stone Bricks" with enchants flag hidden)
+			compress(player, Large amethyst Bud, Amethyst Shard of mending 1 named "&5Amethyst Shard" with enchants flag hidden)
+			compress(player, Beacon, glass pane of mending 1 named "&bCompressed Beacon" with enchants flag hidden)
+			wait 0.1 seconds
