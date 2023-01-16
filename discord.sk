@@ -208,3 +208,26 @@ command /check:
 		set {_role} to role with the id "LINK ROLE ID"
 		set {_user} to user with the id {discord::user::%player's uuid%}
 		add {_role} to roles of {_user} in guild with id "GUILD ID"
+		
+function playerEmbed(p: player, event: string):
+	set {_u} to uuid of {_p}
+	make embed:
+		#set title of embed to "**%{_p}%** joined!"
+		set author of embed to "%{_p}% %{_event}%."
+		set thumbnail of embed to "https://crafatar.com/renders/head/%{_u}%"
+		if {_event} is "joined":
+			set title of embed to "**%{_p}%** joined!"
+			set embed color of the embed to lime
+		else if {_event} is "left":
+			set title of embed to "**%{_p}%** left!"
+			set embed color of the embed to red
+		else if {_event} is "joined for the first time":
+			set title of embed to "**%{_p}%** joined for the first time!"
+			set embed color of the embed to yellow
+	post last made embed to channel with id "MC CHAT CHANNEL ID"
+
+on join:
+	playerEmbed(player, "joined")
+
+on quit:
+	playerEmbed(player, "left")
