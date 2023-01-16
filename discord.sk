@@ -1,0 +1,210 @@
+
+options:
+	m: &7
+	o: &8
+	prefix: SERVER NAME HERE
+
+
+define new bot named "BOT NAME":
+	token: "BOT TOKEN"
+	intents: default intents
+	policy: all
+	auto reconnect: true
+	compression: none
+
+	on ready:
+		send "&a%event-bot%&2 has been loaded!" to console
+
+on load:
+	set {_cmd::link} to new slash command named "link" with description "Link your discord account with your minecraft account!"
+	add new required integer option named "code" with description "Please put your link code here!" to options of {_cmd::link}
+
+	set {_cmd::checkmc} to new slash command named "checkmc" with description "Check if a player is linked!"
+	add new user option named "member" with description "Please put a member here!" to options of {_cmd::checkmc}
+
+	update {_cmd::*} globally in guild with id "GUILD ID"
+
+
+command /link:
+	trigger:
+		if {linked::%player's uuid%} is not set:
+			set {_code} to random integer between 111111 and 999999
+
+			if {code::%{_code}%} is set:
+				make player execute command "/link"
+				stop
+
+			set {code::%{_code}%} to player
+
+			send "&7Your linking code is &e%{_code}%" to player
+			send "&7Use the command &e/link %{_code}% &7in /discord"
+
+		else:
+			send "&cYou are already Linked..."
+
+command /resetlink <player>:
+	permission: op
+	trigger:
+		if {linked::%arg-1's uuid%} is set:
+			delete {linked::%arg-1's uuid%}
+			delete {linked::discord::%{discord::user::%arg-1's uuid%}%}
+			send "{@prefix} &8| {@m}Reset &e%arg 1%{@m}'s link!"
+		else:
+			send "{@prefix} &8| &e%arg 1%{@m} is not linked!"
+
+command /checkdiscord <player>:
+	permission: op
+	trigger:
+		if {linked::%arg-1's uuid%} is set:
+			send "{@prefix} &8| &e%arg-1%{@m} Is Linked To The Discord Account: &e%{discord::%arg-1's uuid%}%" 
+		else:
+			send "{@prefix} &8| &e%arg-1% {@m}Has Not Linked Yet!"
+
+on slash command:
+	set {_name} to event-string
+	if {_name} is "link":
+		set {_code} to argument "code" as integer
+		stop if discord id of event-channel is not "LINK CHANNEL ID"
+		if {linked::discord::%discord id of event-user%} is not set:
+			if {code::%{_code}%} is set:
+
+				set {_player} to {code::%{_code}%}
+				set {_uuid} to uuid of {_player}
+
+				delete {code::%{_code}%}
+
+				set {linked::%{_uuid}%} to true
+				set {linked::discord::%discord id of event-user%} to true
+				set {discord::user::%{_uuid}%} to discord id of event-user
+				set {discord::%{_uuid}%} to "%event-user%"
+				set {minecraft::%discord id of event-user%} to {_player}
+				#rewards would go here
+				set member nickname of event-member to "[✔] %{_player}%"
+				add role with id "LINK ROLE ID" to roles of event-member
+				make embed:
+					set footer of embed to "Requested By %event-user%"
+					set footer icon of embed to avatar of event-user
+					set title of embed to "%{_player}%"
+					set description of embed to "You are now linked with %{_player}%!"
+					set embed color of embed to hex "ffafcc"
+					set thumbnail of embed to "https://crafatar.com/renders/head/%{_player}%"
+				reply with hidden last embed
+				stop
+
+			make embed:
+				set footer of embed to "Requested By %event-user%"
+				set footer icon of embed to avatar of event-user
+				set title of embed to "Could Not Find Code"
+				set description of embed to "The Code `%{_code}%` Was Not Found"
+				set embed color of embed to hex "ffafcc"
+			reply with hidden last embed
+
+
+		else:
+			make embed:
+				set footer of embed to "Requested By %event-user%"
+				set footer icon of embed to avatar of event-user
+				set title of embed to "Already Linked"
+				set description of embed to "The User %event-user% Is Already Linked"
+				set embed color of embed to hex "ffafcc"
+			reply with hidden last embed
+
+on slash command:
+	set {_name} to event-string
+	if {_name} is "checkmc":
+		set {_member} to argument "member" as user
+		if event-member has discord permission administrator:
+			if {linked::discord::%discord id of {_member}%} is set:
+				make embed:
+					set footer of embed to "Requested By %event-user%"
+					set footer icon of embed to avatar of event-user
+					set title of embed to "%{minecraft::%discord id of {_member}%}%"
+					set description of embed to "%{_member}% Is Linked To The Mc Account: %{minecraft::%discord id of {_member}%}%"
+					set embed color of embed to hex "ffafcc"
+					set thumbnail of embed to "https://crafatar.com/renders/head/%{minecraft::%discord id of {_member}%}%"
+				reply with hidden last embed
+			else:
+				make embed:
+					set footer of embed to "Requested By %event-user%"
+					set footer icon of embed to avatar of event-user
+					set title of embed to "Error"
+					set description of embed to "The user %{_member}% has not linked yet!"
+					set embed color of embed to hex "ffafcc"
+				reply with hidden last embed
+		else:
+			stop
+
+on bot shutdown:
+	send "&c%event-bot%&c Has been shutdown." to console
+
+on script unload:
+	set presence of the bot named "SERVER NAME HERE" to watching "Server Is Stopping..."
+	set online status of  bot "SERVER NAME HERE" to do not disturb
+	post ":octagonal_sign: **Server has stopped.**" to channel with id "CONSOLE CHANNEL ID"
+
+on script load:
+	set online status of bot "SERVER NAME HERE" to online
+	post ":white_check_mark: **Server has started!**" to channel with id "CONSOLE CHANNEL ID"	
+	editPresence()
+
+on ready:
+	send "&a%event-bot%&2 has been loaded!" to console
+
+on guild ready:
+		send "&a%event-bot%&2 just loaded &a%event-guild%&2 guild!" to console
+
+on message received:
+	if message is from guild:
+
+		stop if event-member is a discord bot
+
+		stop if event-member is console
+
+		if event-channel is channel with id "CONSOLE CHANNEL ID":
+			if message does not contain "@":
+				execute console command "/%event-message%"
+			else:
+				stop
+		if event-channel is channel with id "MC-CHAT CHANNEL ID":
+			broadcast "&9[DISCORD] &7%effective name of event-member%: &f%event-message%"
+
+function editPresence():
+	loop all players:
+		add loop-player to {_on::*}
+	if {isWhitelisted} is not true:
+		if size of {_on::*} < 1:
+			set online status of bot "SERVER NAME HERE" to idle
+			set presence of the bot named "SERVER NAME HERE" to playing "SERVER NAME HERE | 0 players"
+		else:
+			set online status of bot "SERVER NAME HERE" to online
+			set presence of the bot named "SERVER NAME HERE" to playing "SERVER NAME HERE (%size of {_on::*}%/%max players%)"
+	else:
+		set online status of bot "SERVER NAME HERE" to do not disturb
+		set presence of the bot named "SERVER NAME HERE" to playing ">> Maintenance <<"
+
+
+on message receive:
+	if message is from guild:
+		stop
+	else:
+		make embed:
+			set title of embed to "Private Message"
+			set description of embed to "This is a private message from %mention tag of event-user%!"
+			set footer of embed to "Powered by SERVER NAME HERE!"
+			set embed color of embed to pink
+			add inline field named "Message" with value "%event-message%" to fields of embed
+		post last embed to channel with id "Bot Private Message CHANNEL ID"
+		stop
+
+on command "/whitelist off":
+	set {isWhitelisted} to false
+	editPresence()
+on command "/whitelist on":
+	set {isWhitelisted} to true
+	editPresence()
+
+command /check:
+	trigger:
+		set {_role} to role with the id "LINK ROLE ID"
+		set {_user} to user with the id {discord::user::%player's uuid%}
+		add {_role} to roles of {_user} in guild with id "GUILD ID"
