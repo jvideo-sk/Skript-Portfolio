@@ -1,2 +1,2 @@
 # Skript-Portfolio
-A skript porfolio to show protentional server owners how good I am
+A collection of skripts to make a skript portfolio
