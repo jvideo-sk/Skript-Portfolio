@@ -1,0 +1,16 @@
+command /spawn:
+	trigger:
+		set {_time} to 5
+		set {_x} to player's x-position
+		loop {_time}+1 times:
+			if player's x-position != {_x}:
+				send action bar "&cYou can't move!" to player
+				stop
+			if {_time} <= 0:
+				teleport player to {spawn}
+				send action bar "&7You have been teleported to spawn!" to player
+			else:
+				send action bar "&7Please wait %{_time}%&7 second(s)." to player
+				wait 1 second
+				subtract 1 from {_time}
+				send action bar "&7Please wait %{_time}%&7 second(s)." to player
