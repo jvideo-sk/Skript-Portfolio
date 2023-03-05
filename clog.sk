@@ -8,5 +8,5 @@ on any command:
 		if {-combat::%player's uuid%} is set:
 			set {_time} to difference between {-combat::%player's uuid%} and now
 			if {_time} < 5 seconds:
-				send "&cYour currenly in combat, please wait" to player
+				send "&cYour currenly in combat, please wait %{_time}%&c seconds." to player
 				cancel event
