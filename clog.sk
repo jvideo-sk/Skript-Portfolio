@@ -3,7 +3,7 @@ on damage:
 		set {-combat::%attacker's uuid%} to now
 		set {-combat::%victim's uuid%} to now
 
-on any command:
+on command:
 	if player is not op:
 		if {-combat::%player's uuid%} is set:
 			set {_time} to difference between {-combat::%player's uuid%} and now
