@@ -1,11 +1,14 @@
-function compress(p: player, i: item, r: item):
+function compress(p: player, i: item, finishi: item):
 	set {_inv} to {_p}'s inventory 
 	if {_inv} contains 64 of {_i}:
-		remove 64 of {_i} from {_inv}
-		give {_p} 1 of {_r}
-		stop
-		
+		if {_i} is not enchanted: #not needed but is recomended that you should enchant your compressed variants
+			remove 64 of {_i} from {_inv}
+			give {_p} 1 of {_finishi}
+			stop
+		else:
+			stop
+
 on join:
 	while player is online:
-		compress(player, cobblestone, stone named "Compressed Stone")
+		compress(player, cobblestone, stone named "some random shit idk")
 		wait 0.1 seconds
