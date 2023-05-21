@@ -1,3 +1,11 @@
+#NOT UPDATED!
+#PROBABLY DOESN'T WORK!
+# USE AT YOUR OWN RISK!
+
+
+
+
+
 function compress(p: player, i: item, finishi: item):
 	set {_inv} to {_p}'s inventory 
 	if {_inv} contains 64 of {_i}:
