@@ -1,0 +1,40 @@
+# REQUIRES SKNOISE!
+
+options:
+	seed: 69420
+	y-level: 10
+
+on script load:
+  set {-gen::simplex} to new simplex generator with seed {@seed}
+  set octaves of {-gen::simplex} to 4
+  set fractal type of {-gen::simplex} to FBM
+  set frequency of {-gen::simplex} to 0.005 # you'll want less with more octaves
+
+function getChunkCoords(chunk: Chunk) :: Numbers:
+	set {_s::*} to split "%{_chunk}%" at ")"
+	set {_s2::*} to split "%{_s::1}%" at "("
+	set {_coords::*} to split "%{_s2::2}%" at ","
+	set {_coords::1} to {_coords::1} parsed as number
+	set {_coords::2} to {_coords::2} parsed as number
+	return {_coords::*}
+
+on chunk load:
+	wait 1 tick
+	broadcast "%event-chunk% Has been loaded!"
+	set {_coords::*} to getChunkCoords(event-chunk)
+	broadcast "%{_coords::*}%"
+	loop 16 times:
+		set {_x} to loop-value + ({_coords::1} * 16) - 1
+		stop
+		loop 16 times:
+			set {_z} to loop-value-2 + ({_coords::2} * 16) - 1
+			set {_value} to value of {-gen::simplex} at {_x}, {@y-level}, {_z}
+			set {_newValue} to {_value} * 50
+			set {_loc} to location({_x}, {_newValue}, {_z}, world "test")
+			if chunk at {_loc} is not loaded:
+				stop
+			set block at {_loc} to grass
+			loop 16 times:
+				set {_under} to block under {_loc}
+				set block under {_loc} to dirt
+				set block under {_under} to bedrock
