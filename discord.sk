@@ -1,3 +1,4 @@
+# REQUIRES DISKY (https://github.com/DiSkyOrg/DiSky/releases)
 
 options:
 	m: &7
