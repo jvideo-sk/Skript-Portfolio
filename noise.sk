@@ -1,4 +1,4 @@
-# REQUIRES SKNOISE!
+# REQUIRES SKNOISE (https://github.com/ReportCardsMC/SKNoise/releases)!
 
 options:
 	seed: 69420
