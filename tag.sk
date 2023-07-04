@@ -1,4 +1,4 @@
-$ REQUIRES SKBEE (https://github.com/ShaneBeee/SkBee/releases) AND SKRIPT-GUI (https://github.com/APickledWalrus/skript-gui/releases)
+# REQUIRES SKBEE (https://github.com/ShaneBeee/SkBee/releases) AND SKRIPT-GUI (https://github.com/APickledWalrus/skript-gui/releases)
 command /tag:
 	trigger:
 		tag(player)
