@@ -1,0 +1,21 @@
+on death:
+	addHearts(attacker, 1) if getHearts(victim) > 1
+	send "&7You gained a heart by killing &e%victim%&7." to player if getHearts(victim) > 1
+	send "&e%victim%&7 only had 1 heart, so you gained nothing." to player if getHearts(victim) <= 1
+
+command /giveheart <player> <integer>:
+	usage: "&c/giveheart (player) (amount of hearts)"
+	trigger:
+		if arg-2 is not 0:
+			removeHearts(player, arg-2) if getHearts(player) !<= arg-2
+			send "&7You gave &a%arg-2%&7 hearts to &e%arg-1%&7." if getHearts(player) > arg-2
+			send "&7You do not have enough hearts to give that many." if getHearts(player) <= arg-2
+
+
+function getHearts(p: player) :: integer:
+	set {_h} to maximum health of {_p}
+	return {_h} 
+function addHearts(p: player, i: integer):
+	set {_p}'s maximum health to ({_p}'s maximum health) + {_i}
+function removeHearts(p: player, i: integer):
+	set {_p}'s maximum health to ({_p}'s maximum health) - {_i} if getHearts({_p}) > 1
