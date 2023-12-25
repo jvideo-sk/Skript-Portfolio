@@ -1,4 +1,6 @@
 # REQUIRES DISKY (https://github.com/DiSkyOrg/DiSky/releases)
+# NOT UPDATED
+# MAY NOT WORK AS INTENDED!
 
 options:
 	m: &7
