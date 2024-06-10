@@ -5,9 +5,9 @@ on damage:
 	set {-combat::%victim's uuid%} to now
 
 on command:
-	if player is not op:
-		if {-combat::%player's uuid%} is set:
-			set {_time} to difference between {-combat::%player's uuid%} and now
-			if {_time} < 5 seconds:
-				send "&cYour currenly in combat, please wait." to player
-				cancel event
+	player is not op
+	if {-combat::%player's uuid%} is set:
+		set {_time} to difference between {-combat::%player's uuid%} and now
+		if {_time} < 5 seconds:
+			send "&cYour currenly in combat, please wait." to player
+			cancel event
