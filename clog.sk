@@ -1,7 +1,8 @@
 on damage:
-	if attacker is a player:
-		set {-combat::%attacker's uuid%} to now
-		set {-combat::%victim's uuid%} to now
+	attacker is player
+	victim is player
+	set {-combat::%attacker's uuid%} to now
+	set {-combat::%victim's uuid%} to now
 
 on command:
 	if player is not op:
